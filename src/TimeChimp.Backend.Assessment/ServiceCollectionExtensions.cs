@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TimeChimp.Backend.Assessment.Helpers;
+using TimeChimp.Backend.Assessment.Managers;
+using TimeChimp.Backend.Assessment.Repositories;
 
 namespace TimeChimp.Backend.Assessment
 {
@@ -10,6 +13,12 @@ namespace TimeChimp.Backend.Assessment
         /// <param name="services"></param>
         public static void AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IDataAccessLayer, DataAccessLayerDapper>();
+            services.AddScoped<IDataAccessLayer, DataAccessLayerEF>();
+            services.AddTransient<IDataAccessLayerFactory, DataAccessLayerFactory>();
+
+            services.AddScoped<IFeedsManager, FeedsManager>();
+            services.AddScoped<ICacheService, CacheService>();
         }
 
         /// <summary>
