@@ -17,6 +17,8 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.CodeCoverage" Version="16.6.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
     <PackageReference Include="ReportGenerator" Version="4.6.0" />
     <PackageReference Include="Stashbox.Moq" Version="2.1.5" />
     <PackageReference Include="xunit" Version="2.4.1" />

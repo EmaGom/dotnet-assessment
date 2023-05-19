@@ -58,8 +58,8 @@ namespace TimeChimp.Backend.Assessment.Helpers
         {
             if(_memoryCache.TryGetValue(cacheKey, out IEnumerable<T> currentValue))
             {
-                currentValue.ToList().AddRange(value);
-                this.Set(cacheKey, currentValue);
+                this.Remove(cacheKey);
+                this.Set(cacheKey, currentValue.Union(value));
             } else
             {
                 this.Set(cacheKey, value);
