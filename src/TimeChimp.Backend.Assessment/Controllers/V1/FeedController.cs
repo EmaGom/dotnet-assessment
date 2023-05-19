@@ -48,17 +48,16 @@ namespace TimeChimp.Backend.Assessment.Controllers.V1
         /// <response code="200">Returns the item</response>
         /// <response code="400">If the item is null or invalid</response>
         /// <response code="500">If errors in the process</response>
-        [HttpGet]
-        [Route("{feedId}")]
+        [HttpGet("{id}", Name = nameof(GetById))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetById(int feedId)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var feedResult = await this._feedsManager.GetFeedById(feedId);
+                var feedResult = await this._feedsManager.GetFeedById(id);
                 
                 if(feedResult != null)
                     return Ok(feedResult);
@@ -101,7 +100,9 @@ namespace TimeChimp.Backend.Assessment.Controllers.V1
             {
                 var feedResult = await this._feedsManager.InsertFeed(feed);
                 if (feedResult != null)
-                    return CreatedAtAction(nameof(Feed), new { id = feedResult.Id }, feedResult);
+                {
+                    return StatusCode(StatusCodes.Status201Created, feedResult);
+                }
                 
                 return BadRequest();
             }

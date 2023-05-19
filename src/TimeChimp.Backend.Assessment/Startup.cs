@@ -1,10 +1,11 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc;
 using TimeChimp.Backend.Assessment.Repositories;
 using TimeChimp.Backend.Assessment.Helpers;
 
@@ -29,6 +30,7 @@ namespace TimeChimp.Backend.Assessment
             services.AddServiceProviders();
 
             services.AddSingleton<ContextDapper>();
+            services.AddDbContext<ContextEF>(options => options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringOptions.ConnectionStringName), b => b.MigrationsAssembly(typeof(ContextEF).Assembly.FullName)));
             services.AddMemoryCache();
             services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
             services.Configure<ConnectionStringOptions>(config => config.SqlConnection = Configuration.GetConnectionString(ConnectionStringOptions.ConnectionStringName));

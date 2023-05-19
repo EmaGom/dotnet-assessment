@@ -48,7 +48,7 @@ namespace TimeChimp.Backend.Assessment.Repositories
             }
         }
 
-        public async Task<int> InsertFeed(Feed feed)
+        public async Task<Feed> InsertFeed(Feed feed)
         {
             using (var connection = _context.CreateConnection())
             {
@@ -59,7 +59,7 @@ namespace TimeChimp.Backend.Assessment.Repositories
                    feed.Title,
                    feed.Url
                 };
-                return await connection.QuerySingleAsync<int>(sql, param);
+                return await connection.QuerySingleAsync<Feed>(sql, param);
             }
         }
 

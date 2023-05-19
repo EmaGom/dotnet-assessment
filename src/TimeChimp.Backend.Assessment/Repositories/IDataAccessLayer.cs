@@ -28,7 +28,7 @@ namespace TimeChimp.Backend.Assessment.Repositories
         /// <returns></returns>
         Task<T> LogExceptionIfFail<T>(ILogger logger, Func<Task<T>> func);
         Task<IEnumerable<Feed>> GetFeeds(QueryParameters queryParameters = null);
-        Task<int> InsertFeed(Feed feed);
+        Task<Feed> InsertFeed(Feed feed);
         Task<Feed> GetFeedById(int feedId);
     }
 }

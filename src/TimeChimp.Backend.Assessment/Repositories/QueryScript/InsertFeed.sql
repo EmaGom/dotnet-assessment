@@ -7,4 +7,4 @@ VALUES
 	@PostedDateTime,
 	@Url)
 
-SELECT @@IDENTITY;
+SELECT * FROM FEED WHERE Id = @@IDENTITY;

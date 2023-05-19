@@ -1,5 +1,6 @@
-﻿using Microsoft.Identity.Client;
-using System;
+﻿using System;
+using Elasticsearch.Net;
+using TimeChimp.Backend.Assessment.Enums;
 
 namespace TimeChimp.Backend.Assessment.Models
 {
@@ -9,8 +10,8 @@ namespace TimeChimp.Backend.Assessment.Models
         public string Title { get; set; }
 
         // Parameters for being used by a table or optimized the query.
-        public string SortBy { get; set; }
-        public string SortDirection { get; set; }
+        public string SortBy { get; set; } = SortByEnum.PostedDateTime.GetStringValue();
+        public string SortDirection { get; set; } = SortDirectionEnum.Desc.GetStringValue();
         public int PageIndex { get; set; } = 0;
         public int PageSize { get; set; } = 10;
 
@@ -19,8 +20,6 @@ namespace TimeChimp.Backend.Assessment.Models
             var result = false;
             if (this.PostedDate == other.PostedDate &&
                this.Title == other.Title &&
-               this.SortBy == other.SortBy &&
-               this.SortDirection == other.SortDirection &&
                this.PageIndex == other.PageIndex &&
                this.PageSize == other.PageSize)
                 result = true;
@@ -28,5 +27,14 @@ namespace TimeChimp.Backend.Assessment.Models
             return result;
         }
 
+        public bool SameSortAs(QueryParameters other)
+        {
+            var result = false;
+            if (this.SortBy == other.SortBy &&
+               this.SortDirection == other.SortDirection)
+                result = true;
+
+            return result;
+        }
     }
 }
