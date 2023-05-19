@@ -1,10 +1,10 @@
 INSERT INTO Feed
 	(Title,
-	PostedDateTime,
+	PublishDate,
 	[Url])
 VALUES 
 	(@Title,
-	@PostedDateTime,
+	@PublishDate,
 	@Url)
 
 SELECT * FROM FEED WHERE Id = @@IDENTITY;

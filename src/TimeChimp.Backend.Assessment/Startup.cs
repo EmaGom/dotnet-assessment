@@ -33,6 +33,7 @@ namespace TimeChimp.Backend.Assessment
             services.AddDbContext<ContextEF>(options => options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringOptions.ConnectionStringName), b => b.MigrationsAssembly(typeof(ContextEF).Assembly.FullName)));
             services.AddMemoryCache();
             services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
+            services.Configure<FeedsConfiguration>(Configuration.GetSection("FeedsConfiguration"));
             services.Configure<ConnectionStringOptions>(config => config.SqlConnection = Configuration.GetConnectionString(ConnectionStringOptions.ConnectionStringName));
         }
 

@@ -30,5 +30,7 @@ namespace TimeChimp.Backend.Assessment.Repositories
         Task<IEnumerable<Feed>> GetFeeds(QueryParameters queryParameters = null);
         Task<Feed> InsertFeed(Feed feed);
         Task<Feed> GetFeedById(int feedId);
+
+        Task<Category> InsertCategory(Category category);
     }
 }

@@ -72,21 +72,18 @@ namespace TimeChimp.Backend.Assessment.Controllers.V1
 
 
         /// <summary>
-        /// Save a new Feed
+        /// Save a group of Feeds with a Category
         /// </summary>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST /v1/feed
         ///     {
-        ///        "Id": "40f96542-ac26-45c3-8fe1-a7b8c8f97d08", NOT Required.
-        ///        "Title": "This is an example feed",
-        ///        "PostedDateTime": "2023-05-17",
-        ///        "Url": "https://.."
+        ///        "Name": "voetbal"
         ///     }
         /// </remarks>
-        /// <returns>A newly created feed</returns>
-        /// <response code="201">Returns the newly created feed</response>
+        /// <returns>A newly created category with feeds</returns>
+        /// <response code="201">Returns the newly created category with feeds</response>
         /// <response code="400">If the feed is null or invalid</response>
         /// <response code="500">If errors in the process</response>
         [HttpPost]
@@ -94,11 +91,16 @@ namespace TimeChimp.Backend.Assessment.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create(Feed feed)
+        public async Task<IActionResult> Create(CategoryRequest categoryName)
         {
             try
             {
-                var feedResult = await this._feedsManager.InsertFeed(feed);
+                if (string.IsNullOrEmpty(categoryName?.Name))
+                {
+                    return BadRequest();
+                }
+
+                var feedResult = await this._feedsManager.InsertFeeds(categoryName.Name);
                 if (feedResult != null)
                 {
                     return StatusCode(StatusCodes.Status201Created, feedResult);

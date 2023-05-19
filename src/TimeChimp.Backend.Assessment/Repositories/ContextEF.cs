@@ -11,5 +11,6 @@ namespace TimeChimp.Backend.Assessment.Repositories
 
         }
         private DbSet<Feed> Feed { get; set; }
+        private DbSet<Category> Category { get; set; }
     }
 }

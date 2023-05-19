@@ -19,6 +19,7 @@ namespace TimeChimp.Backend.Assessment
 
             services.AddScoped<IFeedsManager, FeedsManager>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IReaderService, ReaderService>();    
         }
 
         /// <summary>

@@ -3,24 +3,29 @@ DROP TABLE IF EXISTS #FeedsTmp;
 CREATE TABLE #FeedsTmp (
 	Id INT,
 	Title VARCHAR(100),
-	PostedDateTime DATETIME,
-	[Url] VARCHAR(1500)
+	PublishDate DATETIME,
+	[Url] VARCHAR(1500),
+	CategoryId INT,
+	[Name] VARCHAR(50)
 );
 
-DECLARE @sortCondition VARCHAR(50) = LOWER(ISNULL(@SortBy, 'PostedDateTime')) + ' ' + LOWER(ISNULL(@SortDirection, 'desc'));
+DECLARE @sortCondition VARCHAR(50) = LOWER(ISNULL(@SortBy, 'PublishDate')) + ' ' + LOWER(ISNULL(@SortDirection, 'desc'));
 DECLARE @size INT = LOWER(ISNULL(@PageSize, 10));
 DECLARE @index INT = LOWER(ISNULL(@PageIndex, 0));
 
 INSERT INTO #FeedsTmp
 SELECT 
-	Id,
-	Title,
-	PostedDateTime,
-	[Url]
+	F.Id,
+	F.Title,
+	F.PublishDate,
+	F.[Url],
+	C.Id AS CategoryId,
+	C.[Name] 
 FROM 
-	Feed
+	Feed F 
+		INNER JOIN Category C ON F.CategoryId = C.Id
 WHERE 
-	(@PostedDate IS NULL OR CAST(PostedDateTime AS DATE) = @PostedDate)
+	(@PublishDate IS NULL OR CAST(PublishDate AS DATE) = @PublishDate)
 	AND (@Title IS NULL OR LOWER(@Title) like LOWER('%' + @Title + '%'));
 
 
@@ -29,9 +34,9 @@ SELECT
 FROM 
 	#FeedsTmp
 ORDER BY 
-	-- PostedDate DateTime   
-    CASE WHEN @sortCondition = 'PostedDateTime asc' THEN PostedDateTime END ASC,
-    CASE WHEN @sortCondition = 'PostedDateTime desc' THEN PostedDateTime END DESC,
+	-- PublishDate DateTime   
+    CASE WHEN @sortCondition = 'PublishDate asc' THEN PublishDate END ASC,
+    CASE WHEN @sortCondition = 'PublishDate desc' THEN PublishDate END DESC,
 	-- Title
     CASE WHEN @sortCondition = 'Title asc' THEN Title END ASC,
     CASE WHEN @sortCondition = 'Title desc' THEN Title END DESC

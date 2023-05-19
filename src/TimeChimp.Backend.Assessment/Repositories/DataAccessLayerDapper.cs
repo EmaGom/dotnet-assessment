@@ -16,7 +16,6 @@ namespace TimeChimp.Backend.Assessment.Repositories
         {
             this._context = context;
         }
-
         public async Task<Feed> GetFeedById(int feedId)
         {
             using (var connection = _context.CreateConnection())
@@ -38,13 +37,35 @@ namespace TimeChimp.Backend.Assessment.Repositories
                 var param = new
                 {
                     queryParameters.Title,
-                    queryParameters.PostedDate,
+                    queryParameters.PublishDate,
                     queryParameters.SortBy,
                     queryParameters.SortDirection,
                     queryParameters.PageSize,
                     queryParameters.PageIndex
                 };
-                return await connection.QueryAsync<Feed>(sql, param);
+                return await connection.QueryAsync<Feed, Category, Feed>(
+                    sql,
+                    (feed, category) =>
+                    {
+                        feed.Category = category;
+                        return feed;
+                    }, 
+                    param,
+                    splitOn: $"{nameof(Category.Name)}");
+            }
+        }
+
+        public async Task<Category> InsertCategory(Category category)
+        {
+            using (var connection = _context.CreateConnection())
+            {
+                var sql = Queries.InsertCategory;
+                var param = new
+                {
+                    category.Name,
+                    category.LastBuildDate
+                };
+                return await connection.QuerySingleAsync<Category>(sql, param);
             }
         }
 
@@ -55,7 +76,7 @@ namespace TimeChimp.Backend.Assessment.Repositories
                 var sql = Queries.InsertFeed;
                 var param = new
                 {
-                   feed.PostedDateTime,
+                   feed.PublishDate,
                    feed.Title,
                    feed.Url
                 };

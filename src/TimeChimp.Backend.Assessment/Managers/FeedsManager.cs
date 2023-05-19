@@ -12,12 +12,14 @@ namespace TimeChimp.Backend.Assessment.Managers
 {
     public class FeedsManager : IFeedsManager
     {
+        private readonly IReaderService _readerService;
         private readonly ICacheService _cacheService;
         private readonly IDataAccessLayer _dataAccessLayer;
         private readonly ILogger _logger;
 
-        public FeedsManager(IDataAccessLayerFactory dataAccessLayerFactory, ICacheService cacheService, ILogger<FeedsManager> logger)
+        public FeedsManager(IReaderService readerService, IDataAccessLayerFactory dataAccessLayerFactory, ICacheService cacheService, ILogger<FeedsManager> logger)
         {
+            this._readerService = readerService;
             this._cacheService = cacheService;
             this._logger = logger;
             // GetInstance of which mapper is going to be used. 
@@ -64,18 +66,25 @@ namespace TimeChimp.Backend.Assessment.Managers
             });
         }
         
-        public async Task<Feed> InsertFeed(Feed feed)
+        public async Task<Category> InsertFeeds(string categoryName)
         {
             return await _dataAccessLayer.LogExceptionAndRollbackTransactionIfFail(_logger, async () =>
-            { 
-                var newFeed = await this._dataAccessLayer.InsertFeed(feed);
+            {
+                Category category = _readerService.Read(categoryName);
+                category = await this._dataAccessLayer.InsertCategory(category);
 
-                if (newFeed.Id > 0)
+                if (category.Feeds.Any())
                 {
-                    this._cacheService.Update<Feed>(CacheKeysEnum.Feeds, newFeed);
+                    foreach(var feed in category.Feeds)
+                    {
+                        feed.CategoryId = category.Id;
+                        await this._dataAccessLayer.InsertFeed(feed);
+                    }
+                    this._cacheService.Update<Feed>(CacheKeysEnum.Feeds, category.Feeds);
                     this._cacheService.OrderCache<Feed>(CacheKeysEnum.Feeds);
                 }
-                return newFeed;
+
+                return category;
             });
         }
     }

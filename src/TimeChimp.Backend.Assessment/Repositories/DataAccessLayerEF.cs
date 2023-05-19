@@ -24,22 +24,26 @@ namespace TimeChimp.Backend.Assessment.Repositories
 
         public async Task<IEnumerable<Feed>> GetFeeds(QueryParameters queryParameters = null)
         {
-            var result = await _dbContext.Set<Feed>().AsNoTracking().ToListAsync();
+            var result = await _dbContext.Set<Feed>().AsNoTracking().Where(feed => (string.IsNullOrEmpty(queryParameters.Title) || EF.Functions.Like(feed.Title, $"%{queryParameters.Title}%")) &&
+                                        (DateTime.MinValue == queryParameters.PublishDate || EF.Functions.DateDiffDay(feed.PublishDate, queryParameters.PublishDate) != 0)).ToListAsync();
 
-            return result.Where(feed => (string.IsNullOrEmpty(queryParameters.Title) || EF.Functions.Like(feed.Title, $"%{queryParameters.Title}%")) &&
-                                        (DateTime.MinValue == queryParameters.PostedDate || EF.Functions.DateDiffDay(feed.PostedDateTime, queryParameters.PostedDate) != 0))
-                            .AsQueryable().OrderBy($"{queryParameters.SortBy} {queryParameters.SortDirection}")
+            return result.AsQueryable().OrderBy($"{queryParameters.SortBy} {queryParameters.SortDirection}")
                             .Skip(queryParameters.PageSize * queryParameters.PageIndex)
                             .Take(queryParameters.PageSize);
         }
 
         public async Task<Feed> InsertFeed(Feed feed)
         {
-           
             await _dbContext.Set<Feed>().AddAsync(feed);
             _dbContext.SaveChanges();
             return feed;
-         
+        }
+
+        public async Task<Category> InsertCategory(Category category)
+        {
+            await _dbContext.Set<Category>().AddAsync(category);
+            _dbContext.SaveChanges();
+            return category;
         }
 
         #region LogException

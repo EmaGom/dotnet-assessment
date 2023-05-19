@@ -54,14 +54,15 @@ namespace TimeChimp.Backend.Assessment.Helpers
             return _memoryCache.TryGetValue(cacheKey, out value);
         }
 
-        public void Update<T>(CacheKeysEnum cacheKey, T value)
+        public void Update<T>(CacheKeysEnum cacheKey, IEnumerable<T> value)
         {
             if(_memoryCache.TryGetValue(cacheKey, out IEnumerable<T> currentValue))
             {
-                this.Set(cacheKey, currentValue.Append(value));
+                currentValue.ToList().AddRange(value);
+                this.Set(cacheKey, currentValue);
             } else
             {
-                this.Set(cacheKey, new List<T>() { value });
+                this.Set(cacheKey, value);
             }
         }
         public IEnumerable<T> OrderCache<T>(CacheKeysEnum cacheKey, QueryParameters queryParameters = null)

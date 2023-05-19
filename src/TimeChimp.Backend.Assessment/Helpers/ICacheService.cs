@@ -11,7 +11,7 @@ namespace TimeChimp.Backend.Assessment.Helpers
         IEnumerable<T> Set<T>(CacheKeysEnum cacheKey, IEnumerable<T> value);
         T Set<T>(CacheKeysEnum cacheKey, T value);
         void Remove(CacheKeysEnum cacheKey);
-        void Update<T>(CacheKeysEnum cacheKey, T value);
+        void Update<T>(CacheKeysEnum cacheKey, IEnumerable<T> value);
         IEnumerable<T> OrderCache<T>(CacheKeysEnum cacheKey, QueryParameters queryParameters = null);
     }
 }
