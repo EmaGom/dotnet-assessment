@@ -10,9 +10,9 @@ namespace TimeChimp.Backend.Assessment.Repositories
 {
     public class DataAccessLayerDapper : IDataAccessLayer
     {
-        private readonly ContextDapper _context;
+        private readonly IContext _context;
 
-        public DataAccessLayerDapper(ContextDapper context)
+        public DataAccessLayerDapper(IContext context)
         {
             this._context = context;
         }

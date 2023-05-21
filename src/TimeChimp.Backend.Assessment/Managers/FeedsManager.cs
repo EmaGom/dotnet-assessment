@@ -33,7 +33,7 @@ namespace TimeChimp.Backend.Assessment.Managers
                 Feed feedResult;
                 if (_cacheService.TryGetValue<Feed>(CacheKeysEnum.Feeds, out IEnumerable<Feed> feeds) && feeds.Any(f => f.Id == feedId))
                 {
-                    feedResult = feeds.Where(f => f.Id == feedId).FirstOrDefault();
+                    feedResult = feeds.Where(f => f.Id == feedId).SingleOrDefault();
                 }
                 else
                 {
@@ -57,10 +57,6 @@ namespace TimeChimp.Backend.Assessment.Managers
                 
                     this._cacheService.Set<Feed>(CacheKeysEnum.Feeds, feeds);
                 } 
-                else if(feeds.Any() && !cacheQueryParameters.SameSortAs(queryParameters))
-                {
-                    feeds = this._cacheService.OrderCache<Feed>(CacheKeysEnum.Feeds, queryParameters);
-                }
             
                 return feeds;
             });

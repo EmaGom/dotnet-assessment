@@ -12,8 +12,8 @@ namespace TimeChimp.Backend.Assessment.Repositories
 {
     public class DataAccessLayerEF : IDataAccessLayer
     {
-        private readonly ContextEF _dbContext;
-        public DataAccessLayerEF(ContextEF dbContext)
+        private readonly DbContext _dbContext;
+        public DataAccessLayerEF(DbContext dbContext)
         {
             _dbContext = dbContext;
         }

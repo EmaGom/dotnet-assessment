@@ -21,16 +21,8 @@ namespace TimeChimp.Backend.Assessment.Models
             if (this.PublishDate == other.PublishDate &&
                this.Title == other.Title &&
                this.PageIndex == other.PageIndex &&
-               this.PageSize == other.PageSize)
-                result = true;
-
-            return result;
-        }
-
-        public bool SameSortAs(QueryParameters other)
-        {
-            var result = false;
-            if (this.SortBy == other.SortBy &&
+               this.PageSize == other.PageSize &&
+               this.SortBy == other.SortBy &&
                this.SortDirection == other.SortDirection)
                 result = true;
 

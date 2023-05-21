@@ -4,7 +4,7 @@ using System.Data;
 
 namespace TimeChimp.Backend.Assessment.Repositories
 {
-    public class ContextDapper
+    public class ContextDapper : IContext
     {
         private ConnectionStringOptions connectionStringOptions;
 

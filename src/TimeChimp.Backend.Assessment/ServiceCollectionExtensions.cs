@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TimeChimp.Backend.Assessment.Helpers;
 using TimeChimp.Backend.Assessment.Managers;
 using TimeChimp.Backend.Assessment.Repositories;
@@ -13,6 +14,8 @@ namespace TimeChimp.Backend.Assessment
         /// <param name="services"></param>
         public static void AddServices(this IServiceCollection services)
         {
+            services.AddTransient<IContext, ContextDapper>();
+            services.AddTransient<DbContext, ContextEF>();
             services.AddScoped<IDataAccessLayer, DataAccessLayerDapper>();
             services.AddScoped<IDataAccessLayer, DataAccessLayerEF>();
             services.AddTransient<IDataAccessLayerFactory, DataAccessLayerFactory>();
